@@ -17,6 +17,9 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          token: ${{ github.token }}
 
       - name: Select Template
         id: template
