@@ -23,18 +23,26 @@ jobs:
 
             const action = context.payload.action;
 
+            // Only true when base branch changes
             const baseChanged =
               context.payload.changes &&
               context.payload.changes.base;
+
+            // Run only for:
+            // 1. New PR
+            // 2. Reopened PR
+            // 3. Target branch changed
 
             if (
               action !== 'opened' &&
               action !== 'reopened' &&
               !baseChanged
             ) {
+
               console.log(
-                'Skipping update because target branch was not modified.'
+                'Skipping template update - PR content edited but target branch unchanged.'
               );
+
               return;
             }
 
@@ -70,6 +78,10 @@ jobs:
 
               return;
             }
+
+            console.log(
+              `Applying template ${templatePath} for ${targetBranch}`
+            );
 
             const file =
               await github.rest.repos.getContent({
